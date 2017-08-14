@@ -2,14 +2,16 @@ import string
 import json
 import time
 import random
+import sys
 from collections import defaultdict
 
 theDict = defaultdict(list);
 data = [];
 
+
 def prepareText(text):
     
-    text = text.lower();
+#    text = text.lower();
     exclude = set(string.punctuation+"\n");
 #    text = ''.join(ch for ch in text if ch not in exclude);
     text = text.split(' ');
@@ -70,14 +72,13 @@ def getNextWord(word):
     return (word);
 
 def check(snippet, currentLen):
-    
 
     if len(snippet) < 1:
         return False;
     
     if currentLen > 100:    #only consider if over 100 char
         if snippet[len(snippet)-1] == '.': 
-         #   print("Has Period.");
+            #print("Has Period.");
             return False;
         if snippet[0] == "#":
          #   print("Has Hashtag.");
@@ -117,23 +118,26 @@ def fixEnd(text):
     return newTxt;
                 
 def tweet():
+   # print("getting markov");
     total = "";
-    while True: #CANT STOP WONT STOP
-        theWord = getWord(); #The seed, I guess you'd call it
-        total = theWord;
-        nextWord = "";
-        contTweet = True;
-        while contTweet:
-            theWord = getNextWord(theWord);
-            if check(theWord,len(total)):
-                total = total+" "+theWord;
-            else:
-                contTweet = False;
+    theWord = getWord(); #The seed, I guess you'd call it
+    total = theWord;
+    nextWord = "";
+    contTweet = True;
+    while contTweet:
+        theWord = getNextWord(theWord);
+        if check(theWord,len(total)):
+            total = total+" "+theWord;
+        else:
+            contTweet = False;
 
-        time.sleep(1.5);
-        print(fixEnd(total)+" "+str(len(fixEnd((total)))));
-        contTweet = True
+#    print(fixEnd(total)+" "+str(len(fixEnd((total)))));
+#    contTweet = True
+    return(fixEnd(total));
+#    sys.stdout.flush();
 
+""" 
+#Deprecated
 def oldTweet():
     total = ""
     maxCnt = 5;
@@ -149,6 +153,7 @@ def oldTweet():
         print(total)
         total = "";
 
+"""
 def feed(word):
     
     total = ""
@@ -171,90 +176,22 @@ def containCount(text,symbols):
                 count=count+1;
     return count;
 
-#test = ("ARE OMFG, ARE WE ARE REALLY ARE DOING THIS AGAIN?? ARE WE REALLY DOING THIS AGAIN OMG");
-#print(stepThroughText("ARE OMFG, ARE WE ARE REALLY ARE DOING THIS AGAIN?? ARE WE REALLY DOING THIS AGAIN OMG"));
+def post(txt):
 
+    with open("currentTweet.json","r") as jsonFile:
+        data = json.load(jsonFile);
 
-test ="""
-Oh my god,
-Are we doing this again?
-Are we really doing this again?
-Oh my god,
-I just can't believe
-We really can be doing this again.
-Oh, we never learn.
-Oh, we never ever learn.
-Will we ever learn?
-Tell me something,
-Or can you be sure.
-That the next time we
-Head for the door,
-That you'll go your way,
-And I'll go mine.
-'Cause I keep on doing this
-All of the time with you
-Again and again
-And again and again.
-Again and again.
-Oh my god,
-Are we doing this again?
-Are we really doing this again?
-Oh my god.
-Switch off those eyes, oh,
-'Cause they show.
-You are to happen,
-I already know.
-You're my worst habit
-I'm trying to break.
-If you keep giving,
-I'll probably take from you.
-Again and again and again and again
-Again and again.
-Oh my god,
-Are we doing this again?
-Are we really doing this again?
-Oh my god,
-I just can't believe
-We really can be doing this again.
-Will we ever learn?
-Will we never ever ever learn.
-Do you wanna learn?
-What the hell were we thinking?
-I think we all
-Should probably start thinking,
-And then things will not go so far.
-Try to keep our distance.
-Try to take some time.
-Try to see things clearly,
-And get you the hell off my mind.
-Oh my god,
-Are we doing this again?
-Are we really doing this again?
-Oh my god,
-I just can't believe
-We really can be doing this again.
-Will we never learn?
-Will we never ever learn?
-We're never gonna learn.
-"""
+    tmp = data["theTweet"];
+    data["theTweet"] = txt;
 
-"""
-print(theDict);
-txt = (getWord());
-while True:
-    print(txt);
-    txt = getNextWord(txt);
-    print(txt)
-"""
+    with open("currentTweet.json","w") as jsonFile:
+        json.dump(data,jsonFile);
 
 stepThroughJSON();
 dataToDict();
 
-#for i in range(100):
-#    print(fixEnd("This is a test"));
-
-#print(fixEnd("This is another. test"));
-
-tweet()
-
-
+while True:
+    txt = tweet();
+    print(txt);
+    post(txt.encode('utf-8'));
+    time.sleep(60*.5);

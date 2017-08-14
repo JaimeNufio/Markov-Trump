@@ -1,0 +1,28 @@
+{
+  "name": "markov-trump",
+  "version": "1.0.0",
+  "description": "Twitter Bot for my markov cjaom gemeratpr",
+  "main": "twitBot.js",
+  "scripts": {
+    "test": "go"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaimenufio/markov-trump.git"
+  },
+  "keywords": [
+    "bot",
+    "trump",
+    "markov-chain",
+    "markov"
+  ],
+  "author": "Jaime Nufio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jaimenufio/markov-trump/issues"
+  },
+  "homepage": "https://github.com/Jaimenufio/markov-trump#readme",
+  "dependencies": {
+    "firstline": "^1.2.1"
+  }
+}
