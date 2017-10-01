@@ -57,8 +57,7 @@ function tweetTimer(){
 	}
 }
 
-//tweetTimer();
-//
+sendTweet(getMarkov());
 
 var interval = setInterval(function() {
 	newline = getMarkov();
